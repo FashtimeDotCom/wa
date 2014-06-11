@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="author" content="彩惠智能科技">
+{% if site %}
+	{% set title = '' %}
+	{% if news %}
+		{% set title = news.title %}
+    {% else %}
+        {% if news_list[0] %}
+        	{% set title = news_list[0].title %}
+        {% endif %}
+    {% endif %}
+<meta name="description" content="{{ title|replace(None, '') }}-{{ site.description|replace(None, '') }}">
+<meta name="keywords" content="{{ site.keyword|replace(None, '') }}">
+<link rel="shortcut icon" href="{{ site.file_url }}" type="image/x-icon"/>
+<title>{{ title }}-{{ site.title }}
+</title>
+{% else %}
+<meta name="description" content="体彩,即开型,彩票,彩惠彩票">
+<meta name="keywords" content="体彩,即开型,彩票,彩惠彩票">
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/x-icon"/>
+<title>广东彩惠智能科技有限公司</title>
+{% endif %}
+
+{% include "_include/_bootstrap_css.html" %}
+{% include "_include/_site_js.html" %}
+</head>
+<body>
+<div class="header">
+    <div class="head">
+    	{% if site %}
+        <a href="{{ url_for('frontend.index') }}"><img src="{{ site.file_url }}" />
+        	<span>{{ site.title|replace(None, '') }}</span>
+       	</a>
+       	{% else %}
+       	<a href="{{ url_for('frontend.index') }}"><img src="/static/images/logo.png" />
+        	<span>广东彩惠智能科技有限公司</span>
+       	</a>
+        {% endif %}
+    </div>
+</div>
+<div class="nav">
+    <div class="subnav">
+        <ul>
+            <li id="title0"><a href="{{ url_for('frontend.index') }}">首页</a></li>
+            {% for category in categorys %}
+            <li id="title{{ category.id }}"><a href="{{ url_for('frontend.aboutme') }}?cate_id={{ category.id }}">{{ category.name }}</a></li>
+            {% endfor %}
+        </ul>
+        <div class="search">
+            <input type="text" id="search_val"><button type="submit" class="search_btn" id="search_btn"></button>
+        </div>
+    </div>
+</div>
+	{% block body %}
+	{% endblock %}
+
+<div class="footer">
+{% if site %}
+{{ site.foot_style|safe }}
+{% else %}
+	<a href="http://www.miibeian.gov.cn" target="_blank" >粤ICP备12053575号-3</a>© 广东彩惠智能科技有限公司<span /> <a href="/admin">网站管理</a>
+{% endif %}
+</div>
+	{% block footerjs %}
+    {% endblock %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+{% extends "layouts/admin_base.html" %}
+{% from "macros/_misc.html" import render_flash_message %}
+{% block body %}
+    <div class="container">
+    {{ render_flash_message() }}
+        <div id="tab_li">
+            <ul>
+                <li class="active"><a href="{{ url_for('admin.news_index') }}">文章管理</a></li>
+                <a href="{{ url_for('admin.category_index') }}"><li>分类管理</li></a>
+            </ul>
+        </div>
+        <div id="list_zoom">
+            <div class="table_con active">
+            	<form class="form-horizontal">
+                	<a href="{{ url_for('admin.news_add') }}" class="operation-button">新增文章</a>
+                    <div class="news_select">
+                        <select name="category_id" id="category_id">
+                              <option value="0">请选择类别</option>
+                              {% for category in cate_list %}
+                              <option value="{{ category.id }}">{{ category.name }}</option>
+                              {% endfor %}
+                        </select>
+                        <button type="submit">查询</button>
+                    </div>
+               	</form>
+                <table class="table" border="0" cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>文章类型</th>
+                        <th>文章标题</th>
+                        <th>显示状态</th>
+                        <th>更新时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for page in pagination.items  %}
+                        <tr>
+                            <td><b>{{ loop.index }}</b></td>
+                            <td><b>{{ page.category_id|filter_category_id }}</b></td>
+                            <td>{{ page.title }}</td>
+                            <td>
+                                {% if page.is_hide == 1 %}
+                                    隐藏
+                                {% else %}
+                                    显示
+                                {% endif %}
+                            </td>
+                            <td>{{ page.add_time }}</td>
+                            <td>
+                                <a href="{{ url_for('admin.news_edit', news_id=page.id) }}">编辑</a>
+                                {% if page.is_hide == 1 %}
+                                <a onclick="news_show('{{ url_for('admin.news_show', news_id=page.id) }}?category_id={{category_id}}')" href="#">显示</a>
+                                {% else %}
+                                <a onclick="news_hide('{{ url_for('admin.news_hide', news_id=page.id) }}?category_id={{category_id}}')" href="#">隐藏</a>
+                                {% endif %}
+                                <a href="#" onclick="del('{{ url_for('admin.news_delete', news_id=page.id) }}')">删除</a>
+                                <a href="{{ url_for('admin.news_on_the', order=page.order) }}">上移</a>
+                                <a href="{{ url_for('admin.news_under_the', order=page.order) }}">下移</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <ul>
+                      {% if pagination.pages>1 %}
+                      <li><a class="opage" href="1">首页</a></li>
+                      {% endif %}
+                      {% if pagination.has_prev %}
+                          <li><a class="opage" href="{{ pagination.prev_num }}">上一页</a></li>
+                      {% endif %}
+
+                      {% for page in pagination.iter_pages() %}
+                         {% if not page %}
+                            <li><a>...</a></li>
+                         {% elif page == pagination.page %}
+                             <li class="active">
+                             <a class="opage" href="{{ page }}" > {{ page }}</a>
+                             </li>
+                         {% else %}
+                            <li><a class="opage" href="{{ page }}">{{ page }}</a></li>
+                         {% endif %}
+                      {% endfor %}
+
+                      {% if pagination.has_next %}
+                        <li><a class="opage" href="{{ pagination.next_num }}">下一页</a></li>
+                      {% endif %}
+                      {% if pagination.pages>1 %}
+                      <li><a class="opage" href="{{ pagination.pages }}">尾页</a></li>
+                      {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>  
+$(document).ready(function () {
+	$("#category_id").get(0).value = {{category_id}};
+	$(".opage").click(function(e){
+		e.preventDefault();
+		var category_id={{ category_id }}
+        var page_num = $(this).attr('href');
+        var url = "{{ url_for('admin.news_index') }}"; 
+        url += '?category_id='+category_id+'&page='+ page_num;
+        console.log(url);
+        window.location.href = url; 
+	});
+});
+
+function del(url){
+	if(confirm("确认删除")) {
+		window.location = url;
+	}
+}
+
+function news_show(url)
+{
+	window.location = url;
+}
+
+function news_hide(url)
+{
+	window.location = url;
+}
+</script>
+{% endblock %}

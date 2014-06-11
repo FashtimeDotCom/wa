@@ -13,6 +13,7 @@ class App(Flask):
         # install plugins
         self._plugins = []
         for prj, plugin in self.config['WA_PLUGINS']:
+            print prj, plugin
             plg = self._install_plugin(pf, prj, plugin)
             for bp, reg_args in plg.blueprints():
                 self.register_blueprint(bp, **reg_args)

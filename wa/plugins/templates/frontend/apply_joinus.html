@@ -1,0 +1,149 @@
+{% extends "layouts/index_base.html" %}
+
+{% block body %}
+<div class="container">
+    <div style="width:500px;margin: 50px auto 10px auto; clear: both">
+        <div class="apply_con" id="apply">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="alert fade in alert-info">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>提交资料成功!</strong>
+            </div>
+            {% endif %}
+            {% endwith %}
+            <form class="form-horizontal" action="{{ url_for("frontend.commit") }}" style="width:450px;" method="POST" onsubmit="return commit();">
+            <div class="control-group" id="div-name">
+                <label class="control-label" for="name">姓名：</label>
+                <div class="controls">
+                    <input type="text" id="name" name="name" placeholder="请输入真实姓名">
+                </div>
+            </div>
+            <div class="control-group" id="div-sex">
+                <label class="control-label" for="sex">性别：</label>
+                <div class="controls">
+                    <input type="radio" name="sex" id="man" class="sex" value="男" checked><span>男</span>
+                    <input type="radio" name="sex" id="woman" class="sex" value="女"><span>女</span>
+                </div>
+            </div>
+            <div class="controls-group">
+                <label class="control-label" for="age">年龄：</label>
+                <div class="controls">
+                    <input type="text" id="age" name="age" placeholder="年龄">
+                </div>
+            </div>
+            <div class="controls-group">
+                <label class="control-label" for="grade">学历：</label>
+                <div class="controls">
+                    <input type="text" id="grade" name="grade" placeholder="学历">
+                </div>
+            </div>
+            <div class="controls-group" id="div-idcard">
+                <label class="control-label" for="idcard">身份证号码：</label>
+                <div class="controls">
+                    <input type="text" id="idcard" name="idcard" placeholder="身份证号码">
+                </div>
+            </div>
+            <div class="controls-group" id="div-phone">
+                <label class="control-label" for="phone">联系电话：</label>
+                <div class="controls">
+                    <input type="text" id="phone" name="phone" placeholder="联系电话">
+                </div>
+            </div>
+            <div class="controls-group">
+                <label class="control-label" for="qudao">加盟渠道：</label>
+                <div class="controls">
+                    <select id="qudao" name="qudao">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+            </div>
+            <div class="controls-group" id="div-addr-belong">
+                <label class="control-label" for="addr_belong">地址归属：</label>
+                <div class="controls">
+                    <select id="addr_belong" name="addr_belong">
+                        <option>自有</option>
+                        <option>加盟</option>
+                        <option>申请</option>
+                    </select>
+                </div>
+            </div>
+            <div class="controls-group" id="div-addr">
+                <label class="control-label" for="address">申请地址：</label>
+                <div class="controls">
+                    <input type="text" id="address" name="address" placeholder="申请地址">
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input type="submit" class="btn btn-large btn-primary" value="提交加盟申请">
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function commit(){
+        var msg = "";
+        var name = $("#name").val();
+        if (name === "" || name === "undefine"){
+            msg = "姓名必须填写\n";
+            $("#div-name").addClass("error");
+            alert(msg);
+            return false;
+        }
+        var idcard = $("#idcard").val();
+        if (idcard === "" || idcard === "undefine"){
+            msg = "身份证号码必须填写\n";
+            $("#div-idcard").addClass("error");
+            alert(msg);
+            return false;
+        }
+        if ((idcard.length > 18 || idcard.length < 15)) {
+            msg = "身份证号码格式不对\n";
+            $("#div-idcard").addClass("error");
+            alert(msg);
+            return false;
+        }
+        phone_test = function(value) {
+            var reg = /(134|135|136|137|138|139|150|151|152|157|158|159|130|131|132|155|156|133|153|185|186|187|188|189|180|145|147)[0-9]{8}$/;
+            return reg.test(value);
+        }
+        var phone = $("#phone").val();
+        if (phone === "" || phone === "undefine"){
+            msg = "手机号号码必须填写\n";
+            $("#div-phone").addClass("error");
+            alert(msg);
+            return false;
+        }
+        if (!phone_test(phone)) {
+            msg = "手机号号码格式错误\n";
+            $("#div-phone").addClass("error");
+            alert(msg);
+            return false;
+        }
+        var addr_belong = $("#addr_belong").val();
+        if (addr_belong === "" || addr_belong === "undefine"){
+            msg = "地址归属必须填写\n";
+            $("#div-addr-belong").addClass("error");
+            alert(msg);
+            return false;
+        }
+
+        var addr = $("#address").val();
+        if (addr === "" || addr === "undefine"){
+            msg = "申请地址必须填写\n";
+            $("#div-address").addClass("error");
+            alert(msg);
+            return false;
+        }
+        return true;
+    }
+
+</script>
+{% endblock %}

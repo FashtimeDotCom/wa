@@ -1,0 +1,13 @@
+<script>
+    //支持ajax的web根路径写法
+    var USER_NAVS = [
+        ["{{ url_for('frontend.index') }}", function() {$("#title0").addClass("active");}],
+        {% for category in categorys %}
+            ["{{ url_for('frontend.aboutme') }}?cate_id={{ category.id }}", function(){ $("#title{{ category.id }}").addClass("active");}],
+        {% endfor %}
+        ["{{ url_for('frontend.joinus') }}", function() {$("#title5").addClass("active");}]
+    ];
+</script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.8.3.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/common_nav.js') }}"></script>

@@ -1,0 +1,23 @@
+{% extends "layouts/index_base.html" %}
+
+{% block body %}
+<div class="container">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/slider.js') }}"></script>
+    <div id="focus">
+        <ul>
+            {% for item in uploads %}
+            <li><a target="_blank" {% if item.target_url %}href="{{ item.target_url }}"{% endif %}><img src="{{ item.file_url }}" title="" alt="" /></a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% for widget in widgets %}
+    <div class="{% if loop.index == 3 %}map_con{% else %}index_con{% endif %}">
+        <div class="index_con_tit">{{ widget.title }}</div>
+        <div class="con_body">
+        	{{ widget.content|safe }}
+        </div>
+    </div>
+    {% endfor %}
+    <div class="space0"></div>
+</div>
+{% endblock %}

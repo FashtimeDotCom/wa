@@ -21,14 +21,19 @@ setup(name='wa',
       install_requires=[
           # -*- Extra requirements: -*-
           'abu.admin',
+          'MySQL-python',
 
           'Flask',
           'Flask-Cache',
           'Flask-CDN',
+          'Flask-SQLAlchemy',
+          'Flask-Uploads',
       ],
       entry_points="""
       # -*- Entry points: -*-
       [abu.admin]
       wa = wa.admin:Admin
+      [wa.plugin]
+      wa_admin=wa.plugins.admin.pluginimpl:PluginImpl
       """,
       )

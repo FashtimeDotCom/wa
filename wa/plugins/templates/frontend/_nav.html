@@ -1,0 +1,5 @@
+            <li id="title0"><a href="{{ url_for('frontend.index') }}">首页</a></li>
+            {% for category in categorys %}
+            <li id="title{{ category.id }}"><a href="{{ url_for('frontend.aboutme') }}?cate_id={{ category.id }}">{{ category.name }}</a></li>
+            {% endfor %}
+            <li id="title5"><a href="{{ url_for('frontend.joinus') }}">渠道加盟</a></li>
