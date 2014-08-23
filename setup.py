@@ -24,6 +24,7 @@ setup(name='wa',
           'MySQL-python',
 
           'Flask',
+          'Flask-User',
           'Flask-Cache',
           'Flask-CDN',
           'Flask-SQLAlchemy',
@@ -33,7 +34,7 @@ setup(name='wa',
       # -*- Entry points: -*-
       [abu.admin]
       wa = wa.admin:Admin
-      [wa.plugin]
-      wa_admin=wa.plugins.admin.pluginimpl:PluginImpl
+      [wa.entry]
+      wa_admin=wa.entry.admin:EntryImpl
       """,
       )

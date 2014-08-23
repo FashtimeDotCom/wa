@@ -29,4 +29,4 @@ WA_PLUGINS = {
 WA_INDEX_PLUGIN = None #('watest', 'watest_index')
 WA_ADMIN_PLUGIN = ('wa', 'wa_admin')
 
-
+WA_ENTRY = ('wa', 'wa_admin')

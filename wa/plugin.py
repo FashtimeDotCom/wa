@@ -23,3 +23,4 @@ class PluginInterface(object):
         If this plugin has not a admin blueprint, return None.
         '''
         raise NotImplemented()
+

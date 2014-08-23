@@ -37,3 +37,13 @@ class App(Flask):
         self._plugins.append(plg)
         return plg
 
+    def load_wa_entry(self):
+        pf = PluginFinder(group='wa.entry')
+        prj, plugin = self.config['WA_ENTRY']
+        wa_entry = pf.plugin(prj, plugin)
+        if not wa_entry:
+            raise wa.Error('Entry(%s) is not found in project(%s).'%(plugin, prj))
+
+        plg = wa_entry(self.config)
+        for bp, reg_args in plg.blueprints():
+            self.register_blueprint(bp, **reg_args)

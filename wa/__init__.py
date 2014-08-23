@@ -9,9 +9,14 @@ __all__ = ('PluginInterface',
         'create_app',
         )
 
+
+class Error(StandardError):
+    pass
+
+
 def create_app(config_file):
     app = App(__name__)
     app.config.from_pyfile(config_file)
-    app.init_plugins()
+    app.load_wa_entry()
     return app
 
