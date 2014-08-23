@@ -35,6 +35,6 @@ setup(name='wa',
       [abu.admin]
       wa = wa.admin:Admin
       [wa.entry]
-      wa_admin=wa.entry.admin:EntryImpl
+      wa_admin=wa.entries.admin:EntryImpl
       """,
       )

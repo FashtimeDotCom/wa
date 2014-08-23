@@ -1,0 +1,69 @@
+
+body {
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+}
+
+label, input, button, select {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 20px;
+}
+
+select, input[type="text"] {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    height: 20px;
+    padding: 4px 6px;
+    color: #555;
+    border-radius: 4px;
+}
+
+.form-horizontal .control-label {
+    float: left;
+    width: 100px;
+    padding-top: 5px;
+    text-align: right;
+}
+
+.form-horizontal .controls {
+    margin: 0 0 10px 110px;
+}
+
+.form-horizontal input {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.apply_con .controls span {
+    position: relative;
+    top: 3px;
+    font-size: 14px;
+    line-height: 27px;
+}
+
+input[type="text"] {
+    width: 150px;
+}
+
+select {
+    height: 30px;
+    width: 165px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+.btn-primary {
+    padding: 11px 19px;
+    font-size: 17.5px;
+    border-radius: 6px;
+    margin-top: 20px;
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #006dcc;
+    background-image: linear-gradient(to bottom, #08c, #04c);
+    background-repeat: repeat-x;
+    border-color: #04c #04c #002a80;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
