@@ -29,4 +29,6 @@ WA_PLUGINS = {
 WA_INDEX_PLUGIN = None #('watest', 'watest_index')
 WA_ADMIN_PLUGIN = ('wa', 'wa_admin')
 
+SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test_wa.db'
+
 WA_ENTRY = ('wa', 'wa_admin')

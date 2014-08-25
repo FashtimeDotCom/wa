@@ -7,7 +7,7 @@ from .pluginhelper import PluginFinder
 class App(Flask):
     def __init__(self, *a, **kw):
         Flask.__init__(self, *a, **kw)
-    
+
     def init_plugins(self):
         pf = PluginFinder(group='wa.plugin')
         # install plugins
@@ -44,6 +44,6 @@ class App(Flask):
         if not wa_entry:
             raise wa.Error('Entry(%s) is not found in project(%s).'%(plugin, prj))
 
-        plg = wa_entry(self.config)
+        plg = wa_entry(self)
         for bp, reg_args in plg.blueprints():
             self.register_blueprint(bp, **reg_args)

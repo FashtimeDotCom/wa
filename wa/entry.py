@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
 
 class EntryInterface(object):
-    def __init__(self, config):
-        self._config = config
+    def __init__(self, app):
+        self.app = app
 
     def blueprints(self):
         '''
