@@ -1,8 +1,12 @@
 # -*- coding:utf-8 -*-
+
 from flask import Blueprint, render_template_string, redirect, url_for
 from flask.views import MethodView
+from flask.ext.babel import Babel
+from flask.ext.mail import Mail
 
 from wa.entry import EntryInterface
+from .model import User
 
 admin = Blueprint('admin', __name__,
         static_folder='.../static',
@@ -35,7 +39,7 @@ from flask.ext.user import current_user, login_required, UserManager, UserMixin,
 def home_page():
     if current_user.is_authenticated():
         return profile_page()
- #   return redirect(url_for('user.login'))
+    return redirect(url_for('user.login'))
     return render_template_string("""
         {% extends "base.html" %}
         {% block content %}
@@ -66,10 +70,20 @@ def profile_page():
         {% endblock %}
         """)
 
-
 class EntryImpl(EntryInterface):
-    def __init__(self, config):
-        EntryInterface.__init__(self, config)
+    def __init__(self, app):
+        EntryInterface.__init__(self, app)
+        from wa.extensions import db
+        db.create_all()
+        self.db = db
+
+        self.babel = Babel(self.app)
+        self.mail = Mail(self.app)
+        self.user_manager = self._init_user()
+
+    def _init_user(self):
+        db_adapter = SQLAlchemyAdapter(self.db,  User)       # Select database adapter
+        return UserManager(db_adapter, self.app)     # Init Flask-User and bind to app
 
     def blueprints(self):
         return [
