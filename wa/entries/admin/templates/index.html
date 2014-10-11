@@ -7,9 +7,31 @@
     <title ng-bind="site.title"></title>
 </head>
 
-<body ng-controller="HeadController">
-    <p ng-bind="site.title"></p>
-    <img ng-src="{{site.logo|angular}}" />
+<body>
+
+    <div ng-controller="HeaderController">
+        <img ng-src="{{site.logo|angular}}" />
+        <h1 ng-bind="site.title"></h1>
+    </div>
+
+    <div ng-controller="SidebarController">
+        <ul>
+            <li ng-repeat="item in menu">
+                <a ng-href="{{item.href|angular}}">{{item.name|angular}}</a>
+            </li>
+        </ul>
+    </div>
+
+    <div ng-controller="ContainerController">
+
+    </div>
+
+    <div ng-controller="FooterController">
+
+    </div>
+
+
+
 </body>
 
 </html>
