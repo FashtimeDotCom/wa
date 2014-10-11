@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html ng-app>
+<head lang="cn" ng-controller="HeadController">
+    <meta charset="UTF-8">
+    <script src="http://cdnjscn.b0.upaiyun.com/libs/angular.js/1.2.18/angular.min.js"></script>
+    <script src="{{url_for('admin.static', filename='js/controllers.js')}}"></script>
+    <title ng-bind="site.title"></title>
+</head>
+
+<body ng-controller="HeadController">
+    <p ng-bind="site.title"></p>
+    <img ng-src="{{site.logo|angular}}" />
+</body>
+
+</html>

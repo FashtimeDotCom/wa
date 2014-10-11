@@ -22,6 +22,7 @@ setup(name='wa',
           # -*- Extra requirements: -*-
           'abu.admin',
           'MySQL-python',
+          'MarkupSafe',
 
           'Flask',
           'Flask-User',
@@ -29,6 +30,11 @@ setup(name='wa',
           'Flask-CDN',
           'Flask-SQLAlchemy',
           'Flask-Uploads',
+          'Flask-Mail',
+          'Flask-Triangle',
+
+          'WTForms-Alchemy',
+
       ],
       entry_points="""
       # -*- Entry points: -*-
