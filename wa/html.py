@@ -1,6 +1,16 @@
 #-*- coding:utf-8 -*-
 from functools import wraps, partial
 
+class TagStack(list):
+    def top(self):
+        return self[-1]
+
+    def push(self, obj):
+        self.append(obj)
+        return obj
+
+_tagstack = TagStack()
+
 class E(object):
     def __init__(self, name, *a, **kw):
         self._name = name
@@ -14,14 +24,11 @@ class E(object):
                 '\n'.join(str(i) for i in self._contents))
 
     def __enter__(self):
-        return self
+        return _tagstack.push(self)
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
+        _tagstack.pop()
         return False
-    
-    def __le__(self, o):
-        self._contents.append(o)
-        return o
 
     def __call__(self, *a, **kw):
         if a:
@@ -157,14 +164,44 @@ u = partial(E, 'u')
 ul = partial(E, 'ul')
 var = partial(E, 'var')
 
-__all__ = [i for i in locals() if 'a' <= i[0] <= 'z'] + ['E']
+def _with_support(f):
+    def _(*a, **kw):
+        atag = f(*a, **kw)
+        if _tagstack:
+            _tagstack.top()(atag)
+        return atag
+    return _
+
+def _method_support(f):
+    def _(self, *a, **kw):
+        atag = f(*a, **kw)
+        self._contents.append(atag)
+        return atag
+    return _
+
+_tmplocals = locals()
+_imported = {'wraps', 'partial'}
+
+_tags = {k : v for k, v in _tmplocals.iteritems() if k not in _imported and 'a' <= k[0] <= 'z'}
+
+for k, v in _tags.iteritems():
+    setattr(E, k, _method_support(v))
+
+for k in _tags:
+    _tmplocals[k] = _with_support(_tags[k])
+
+__all__ = _tags.keys() + ['E']
 
 if __name__ == '__main__':
-    doc = html(aa='b', cc='d')
-    doc(title())
-    with doc <= body() as body:
-        body(h3('xixi'), new='new', aa='a')
+    with html(aa='b', cc='d') as doc:
+        print doc
+        print type(doc)
+        print dir(doc)
+        doc.title('test')
+        with body():
+            h3('xixi')
+        doc(new='new', aa='a')
+
     print doc
 
-    print __all__
 

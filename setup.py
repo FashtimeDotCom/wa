@@ -23,18 +23,7 @@ setup(name='wa',
           'abu.admin',
           'MySQL-python',
           'MarkupSafe',
-
-          'Flask',
-          'Flask-User',
-          'Flask-Cache',
-          'Flask-CDN',
-          'Flask-SQLAlchemy',
-          'Flask-Uploads',
-          'Flask-Mail',
-          'Flask-Triangle',
-
-          'WTForms-Alchemy',
-
+          'bottle',
       ],
       entry_points="""
       # -*- Entry points: -*-

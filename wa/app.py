@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
+from bottle import Bottle
 
-from .pluginhelper import PluginFinder
-
-class App(Flask):
+class App(Bottle):
     def __init__(self, *a, **kw):
-        Flask.__init__(self, *a, **kw)
+        Bottle.__init__(self, *a, **kw)
     #
     # def init_plugins(self):
     #     pf = PluginFinder(group='wa.plugin')
@@ -38,13 +35,27 @@ class App(Flask):
     #     self._plugins.append(plg)
     #     return plg
 
-    def load_wa_entry(self):
-        pf = PluginFinder(group='wa.entry')
-        prj, plugin = self.config['WA_ENTRY']
-        wa_entry = pf.plugin(prj, plugin)
-        if not wa_entry:
-            raise wa.Error('Entry(%s) is not found in project(%s).'%(plugin, prj))
+    # def load_wa_entry(self):
+    #     pf = PluginFinder(group='wa.entry')
+    #     prj, plugin = self.config['WA_ENTRY']
+    #     wa_entry = pf.plugin(prj, plugin)
+    #     if not wa_entry:
+    #         raise wa.Error('Entry(%s) is not found in project(%s).'%(plugin, prj))
+    #
+    #     plg = wa_entry(self)
+    #     for bp, reg_args in plg.blueprints():
+    #         self.register_blueprint(bp, **reg_args)
 
-        plg = wa_entry(self)
-        for bp, reg_args in plg.blueprints():
-            self.register_blueprint(bp, **reg_args)
+
+from .html import *
+
+from bottle import route
+
+@route('/')
+def test():
+    with html() as doc:
+        title('test')
+        with body():
+            adiv = div()
+            adiv.h1('Hello, world!')
+    return str(doc)

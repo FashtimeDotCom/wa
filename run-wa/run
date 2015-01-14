@@ -3,15 +3,21 @@
 
 import os
 
-from wa import create_app
+# from wa import create_app
 
-here = os.path.dirname(os.path.realpath(__file__))
-config_file = os.path.join(here, 'settings.py')
-app = create_app(config_file)
+# here = os.path.dirname(os.path.realpath(__file__))
+# config_file = os.path.join(here, 'settings.py')
+# app = create_app(config_file)
+
+from bottle import run
+
+import wa.app
 
 if __name__ == '__main__':
-    app.run(
-       host=app.config.get('HOST', '0.0.0.0'),
-       port=app.config.get('PORT', 5000),
-       debug=app.config['DEBUG'],
+    run(
+       # host=app.config.get('HOST', '0.0.0.0'),
+       # port=app.config.get('PORT', 5000),
+       # debug=app.config['DEBUG'],
+       debug = True,
+       reloader = True,
     )
