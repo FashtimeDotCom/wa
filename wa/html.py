@@ -23,6 +23,10 @@ class E(object):
                 '' if not self._attributes else ' '.join('{0}="{1}"'.format(k, v) for k, v in self._attributes.iteritems() if v is not None),
                 '\n'.join(str(i) for i in self._contents))
 
+    def __lshift__(self, other):
+        self._contents.append(other)
+        return self
+
     def __enter__(self):
         return _tagstack.push(self)
 
