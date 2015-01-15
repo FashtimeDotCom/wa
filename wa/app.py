@@ -1,8 +1,49 @@
 # -*- coding: utf-8 -*-
+from .html import *
 
-from bottle import Bottle
+import bottle
 
-class App(Bottle):
+__all__ = ['init']
+
+import pkg_resources
+
+class AppFinder(object):
+    def __init__(self, group, name=None):
+        self._group = group
+        self._name = name
+
+    def all_plugins(self, filter=None):
+        if filter:
+            for i in pkg_resources.iter_entry_points(self._group, self._name):
+                if filter(i):
+                    yield i.load()
+        else:
+            for i in pkg_resources.iter_entry_points(self._group, self._name):
+                print i
+                yield i.load()
+
+    def plugin(self, prj, name):
+        return pkg_resources.load_entry_point(prj, self._group, name)
+
+def _load_app():
+    pass
+
+
+def init(conf=None):
+    app = bottle.default_app()
+    if conf:
+        app.config.update(conf)
+
+    # init admin
+    from .admin import init as admin_init
+    admin = admin_init()
+
+    app.mount('/admin', admin)
+
+    return app
+
+
+class App(bottle.Bottle):
     def __init__(self, *a, **kw):
         Bottle.__init__(self, *a, **kw)
     #
@@ -47,11 +88,11 @@ class App(Bottle):
     #         self.register_blueprint(bp, **reg_args)
 
 
-from .html import *
 
-from bottle import route
 
-@route('/')
+app = bottle.default_app()
+
+@app.route('/')
 def test():
     with html() as doc:
         title('test')
