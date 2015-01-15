@@ -37,6 +37,19 @@ class E(object):
             self._attributes.update(kw)
         return self
 
+
+    # bottle support.
+    def __iter__(self):
+        self._iter = True
+        return self
+
+    def next(self):
+        from bottle import HTTPResponse
+        if self._iter:
+            self._iter = False
+            return HTTPResponse(str(self))
+        raise StopIteration()
+
 #    def __getitem__(self, query):
 #        if not query:
 #            yield query
@@ -203,5 +216,8 @@ if __name__ == '__main__':
         doc(new='new', aa='a')
 
     print doc
+    print
+    for i in doc:
+        print i
 
 

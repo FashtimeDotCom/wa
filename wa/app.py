@@ -58,4 +58,4 @@ def test():
         with body():
             adiv = div()
             adiv.h1('Hello, world!')
-    return str(doc)
+    return doc
