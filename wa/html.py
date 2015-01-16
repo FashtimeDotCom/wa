@@ -27,12 +27,12 @@ class E(object):
         self._contents.append(other)
         return self
 
-    def __enter__(self):
-        return _tagstack.push(self)
-
-    def __exit__(self, exc_type, exc_value, exc_traceback):
-        _tagstack.pop()
-        return False
+    # def __enter__(self):
+    #     return _tagstack.push(self)
+    #
+    # def __exit__(self, exc_type, exc_value, exc_traceback):
+    #     _tagstack.pop()
+    #     return False
 
     def __call__(self, *a, **kw):
         if a:
@@ -81,7 +81,7 @@ class SpecialElement(E):
         self._open_close = open_close
     
     def __str__(self):
-        text = ''.join(self._contents)
+        text = ''.join(map(str, self._contents))
         return text.join(self._open_close)
 
 # raw text wrapper
@@ -208,20 +208,3 @@ for k in _tags:
     _tmplocals[k] = _with_support(_tags[k])
 
 __all__ = _tags.keys() + ['E']
-
-if __name__ == '__main__':
-    with html(aa='b', cc='d') as doc:
-        print doc
-        print type(doc)
-        print dir(doc)
-        doc.title('test')
-        with body():
-            h3('xixi')
-        doc(new='new', aa='a')
-
-    print doc
-    print
-    for i in doc:
-        print i
-
-
