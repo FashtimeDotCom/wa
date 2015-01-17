@@ -7,85 +7,74 @@ from . import ui
 
 admin = Bottle()
 
+def make_menu():
+    return [
+        a('Dashboard', href='#'),
+        a('Dashboard', href='#'),
+        a('Dashboard', href='#'),
+        a('Dashboard', href='#'),
+    ]
 
 def make_header():
-    header = div(**{'class': 'page-header'})
-    header.h1('Welcome to admin page.')
+    header = nav(
+        ui.container_fluid(
+            div(
+                a(
+                    'Welcome to admin page.',
+                    **{'class':'navbar-brand'}
+                ),
+                **{'class': 'navbar-header'}
+            ),
+            div(
+                ul(
+                    *map(li, make_menu()),
+                    **{'class':'nav navbar-nav navbar-right'}
+                ),
+                **{'class':'navbar-collapse collapse'}
+            )
+        ),
+        role='navigation',
+        **{'class':"navbar navbar-inverse navbar-fixed-top"}
+    )
     return header
 
 
 def make_sidebar():
-    # with div() as sidebar:
-    # with dl('功能1'):
-    #         dd('菜单1')
-    #         dd('菜单2')
-    #     with dl('功能2'):
-    #         dd('菜单1')
-    #         dd('菜单2')
-    # return sidebar
     sidebar = ui.sidebar(**{'class':'col-sm-3 col-md-2'})
-    sidebar.i('sidebar')
+    sidebar(
+        ul(
+            *map(li, make_menu()),
+            **{'class':'nav nav-sidebar'}
+        ),
+    )
     return sidebar
-
-
-def make_footer():
-    return ui.footer()(i('This is a footer.'))
-
 
 @admin.route('/')
 def home():
     h = head()(
+        meta(name="viewport", content="width=device-width, initial-scale=1"),
         script(
             src=r'http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js',
         ),
         link(rel='stylesheet',
              href=r'http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css',
         ),
+        link(rel='stylesheet',
+             href=r'http://v3.bootcss.com/examples/dashboard/dashboard.css',
+        ),
         title('test'),
     )
-    b = body()(
-        make_header(),
-        make_sidebar(),
-        ui.container()(
-            h2('Hello, world!'),
-            rawtext(r'''
-            <div class="list-group">
-                <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                <div class="list-group">
-                  <a href="#" class="list-group-item active">
-                    Cras justo odio
-                  </a>
-                  <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                  <a href="#" class="list-group-item">Morbi leo risus</a>
-                  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                  <a href="#" class="list-group-item">Vestibulum at eros</a>
-                </div>
-                <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                <div class="list-group">
-                  <a href="#" class="list-group-item active">
-                    Cras justo odio
-                  </a>
-                  <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                  <a href="#" class="list-group-item">Morbi leo risus</a>
-                  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                  <a href="#" class="list-group-item">Vestibulum at eros</a>
-                </div>
-                <div class="list-group">
-                  <a href="#" class="list-group-item active">
-                    Cras justo odio
-                  </a>
-                  <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                  <a href="#" class="list-group-item">Morbi leo risus</a>
-                  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                  <a href="#" class="list-group-item">Vestibulum at eros</a>
-                </div>
-            </div>
-            '''
-            )),
-        hr(),
-        make_footer(),
+    mid = ui.container_fluid(
+        ui.row(
+            make_sidebar(),
+            ui.main(
+                h2('hello, world.'),
+                **{'class':'col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2'}
+            )
+
+        )
     )
-    return ui.page(h, b)
+    return ui.page(h, body(make_header(), mid))
 
 
 def init():

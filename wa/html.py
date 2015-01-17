@@ -12,14 +12,14 @@ class TagStack(list):
 _tagstack = TagStack()
 
 class E(object):
-    def __init__(self, name, *a, **kw):
-        self._name = name
+    def __init__(self, tag, *a, **kw):
+        self._tag = tag
         self._contents = list(a)
         self._attributes = kw
 
     def __str__(self):
         return '<{0} {1}>{2}</{0}>'.format(
-                self._name,
+                self._tag,
                 '' if not self._attributes else ' '.join('{0}="{1}"'.format(k, v) for k, v in self._attributes.iteritems() if v is not None),
                 '\n'.join(str(i) for i in self._contents))
 
@@ -180,6 +180,10 @@ tt = partial(E, 'tt')
 u = partial(E, 'u')
 ul = partial(E, 'ul')
 var = partial(E, 'var')
+
+# HTML5
+
+nav = partial(E, 'nav')
 
 def _with_support(f):
     def _(*a, **kw):

@@ -14,6 +14,14 @@ def build(ui_type, *a, **kw):
         kw['class'] = ui_type
     return h.div(*a, **kw)
 
+def panel(title, *a, **kw):
+    return build("panel panel-default")(
+        build("panel-heading")(
+            h.h3(title, **{'class':'panel-title'})
+        ),
+        build("panel-body")(*a, **kw)
+    )
+
 container = partial(build, 'container')
 container_fluid = partial(build, 'container-fluid')
 row = partial(build, 'row')
@@ -21,3 +29,4 @@ col = partial(build, 'col')
 main = partial(build, 'main')
 sidebar = partial(build, 'sidebar')
 footer = partial(build, 'footer')
+navbar = partial(build, 'navbar')
