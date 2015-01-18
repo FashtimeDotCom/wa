@@ -18,6 +18,10 @@ class E(object):
         self._attributes = kw
 
     def __str__(self):
+        class_value = self._attributes.pop('klass', None)
+        if class_value:
+            assert 'class' not in self._attributes
+            self._attributes['class'] = class_value
         return '<{0} {1}>{2}</{0}>'.format(
                 self._tag,
                 '' if not self._attributes else ' '.join('{0}="{1}"'.format(k, v) for k, v in self._attributes.iteritems() if v is not None),
@@ -55,6 +59,7 @@ class E(object):
         raise StopIteration()
 
 #    def __getitem__(self, query):
+##       tag = e['body#0/div#id:xxx/table/']
 #        if not query:
 #            yield query
 #        tag, q = query.split('/', 1)

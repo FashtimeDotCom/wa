@@ -21,30 +21,30 @@ def make_header():
             div(
                 a(
                     'Welcome to admin page.',
-                    **{'class':'navbar-brand'}
+                    klass='navbar-brand'
                 ),
-                **{'class': 'navbar-header'}
+                klass='navbar-header'
             ),
             div(
                 ul(
                     *map(li, make_menu()),
-                    **{'class':'nav navbar-nav navbar-right'}
+                    klass='nav navbar-nav navbar-right'
                 ),
-                **{'class':'navbar-collapse collapse'}
+                klass='navbar-collapse collapse'
             )
         ),
         role='navigation',
-        **{'class':"navbar navbar-inverse navbar-fixed-top"}
+        klass="navbar navbar-inverse navbar-fixed-top"
     )
     return header
 
 
 def make_sidebar():
-    sidebar = ui.sidebar(**{'class':'col-sm-3 col-md-2'})
+    sidebar = ui.sidebar(klass='col-sm-3 col-md-2')
     sidebar(
         ul(
             *map(li, make_menu()),
-            **{'class':'nav nav-sidebar'}
+            klass='nav nav-sidebar'
         ),
     )
     return sidebar
@@ -69,7 +69,7 @@ def home():
             make_sidebar(),
             ui.main(
                 h2('hello, world.'),
-                **{'class':'col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2'}
+                klass='col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2'
             )
 
         )

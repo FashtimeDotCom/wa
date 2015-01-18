@@ -8,10 +8,10 @@ def page(*a):
     return h.rawtext('')(h.doctype('html'), h.html(lang='zh-cn')(*a))
 
 def build(ui_type, *a, **kw):
-    if 'class' in kw:
-        kw['class'] = ' '.join((ui_type, kw['class']))
+    if 'klass' in kw:
+        kw['klass'] = ' '.join((ui_type, kw['klass']))
     else:
-        kw['class'] = ui_type
+        kw['klass'] = ui_type
     return h.div(*a, **kw)
 
 def panel(title, *a, **kw):
