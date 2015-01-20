@@ -12,7 +12,8 @@ import os
 from wa.app import init
 
 conf = {
-    'sqlalchemyuri' : 'mysql://root:@127.0.0.1/wa_test',
+    #'sqlalchemyuri' : 'mysql://root:@127.0.0.1/wa_test',
+    'sqlalchemyuri':'sqlite:///tmp/wa.db'
 }
 
 app = init(conf)

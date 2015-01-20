@@ -24,6 +24,7 @@ setup(name='wa',
           'MySQL-python',
           'MarkupSafe',
           'bottle',
+          'bottle-sqlalchemy',
       ],
       entry_points="""
       # -*- Entry points: -*-
