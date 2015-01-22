@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from .html import *
-
 import bottle
+
+from .html import *
 
 __all__ = ['init']
 
@@ -35,13 +35,14 @@ def init(conf=None):
         app.config.update(conf)
 
     # first of all, create db.
-    from .db import init as db_init
-    db_init(app)
+    from . import db
+
+    db.init(app)
 
     # init admin
-    from .admin import init as admin_init
-    admin = admin_init()
-    app.mount('/admin', admin)
+    from . import admin
+
+    app.mount('/admin', admin.init())
 
     return app
 
