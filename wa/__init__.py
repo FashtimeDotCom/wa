@@ -6,10 +6,19 @@ from .app import App
 #
 # from flask.ext.triangle import Triangle
 
+from functools import wraps
+
 __version__ = (0, 1, 1, 'dev', 0)
 __all__ = ('Error',
         'create_app',
         )
+
+
+def view(f):
+    @wraps(f)
+    def _(*a, **kw):
+        return str(f(*a, **kw))
+    return _
 
 class Error(StandardError):
     pass

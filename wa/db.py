@@ -7,6 +7,15 @@ from bottle.ext import sqlalchemy as bs
 
 Base = declarative_base()
 
+app = None
+
+def make_session():
+    global app
+    if not app:
+        raise
+    
+
+
 def init(app):
     engine = create_engine(app.config['sqlalchemyuri'], echo=True)
     plugin = bs.Plugin(
