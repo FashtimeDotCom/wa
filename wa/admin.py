@@ -4,12 +4,17 @@ from bottle import Bottle
 
 from .html import *
 from .db import Config as ConfigTable
+from .db import create_session
 from . import ui, view
 
 admin = Bottle()
 
 def get_title():
-    print admin.config
+    db = create_session()
+    title = db.query(ConfigTable).filter_by(key='site-title')
+    if not title:
+        return 'A WA-based site.'
+    return title.first().value
 
 def make_nav():
     items = OrderedDict((
@@ -86,7 +91,7 @@ def make_head(*a, **kw):
 @view
 def config():
     get_title()
-    h = make_head(title('test'))
+    h = make_head(title(get_title()))
     mid = ui.container_fluid(
         ui.row(
             make_sidebar('用户管理'),
