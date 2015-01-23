@@ -35,13 +35,12 @@ def init(conf=None):
         app.config.update(conf)
 
     # first of all, create db.
-    from . import db
+    from . import database
 
-    db.init(app)
+    database.init(app)
 
     # init admin
     from . import admin
-
     app.mount('/admin', admin.init())
 
     return app

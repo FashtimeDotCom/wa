@@ -1,20 +1,22 @@
 # -*- coding:utf-8 -*-
 from collections import OrderedDict
-from bottle import Bottle
+
+from bottle import Bottle, redirect, request
 
 from .html import *
-from .db import Config as ConfigTable
-from .db import create_session
+from .database import Config as ConfigTable
+from .database import create_session, plugin
 from . import ui, view
+
 
 admin = Bottle()
 
 def get_title():
     db = create_session()
-    title = db.query(ConfigTable).filter_by(key='site-title')
-    if not title:
+    title_conf = db.query(ConfigTable).filter_by(key='site_title').first()
+    if not title_conf:
         return 'A WA-based site.'
-    return title.first().value
+    return title_conf.value
 
 def make_nav():
     items = OrderedDict((
@@ -34,7 +36,7 @@ def make_header():
         ui.container_fluid(
             div(
                 a(
-                    'Welcome to admin page.',
+                    get_title(),
                     klass='navbar-brand'
                 ),
                 klass='navbar-header'
@@ -87,21 +89,52 @@ def make_head(*a, **kw):
         *a, **kw
     )
 
+
+def make_main_basic():
+    return ui.main(
+        form(
+            rawtext('网站名称:'),
+            input_(
+                type='text',
+                name='site_title',
+                placeholder=get_title(),
+                # klass='form-control',
+            ),
+            input_(
+                type='submit',
+                value='确定',
+            ),
+            action=admin.get_url('update_site_title'),
+            method='post',
+        ),
+        klass='col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2'
+    )
+
+
 @admin.get('/config', name='config')
 @view
 def config():
-    get_title()
     h = make_head(title(get_title()))
     mid = ui.container_fluid(
         ui.row(
-            make_sidebar('用户管理'),
-            ui.main(
-                *([h2('hello, world.')]*30),
-                klass='col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2'
-            )
+            make_sidebar('基本配置'),
+            make_main_basic(),
         )
     )
     return ui.page(h, body(make_header(), mid))
+
+
+@admin.post('/update_site_title', name='update_site_title')
+def update_site_title(db):
+    new_title = request.forms['site_title']
+    title_conf = db.query(ConfigTable).filter_by(key='site_title').first()
+    if not title_conf:
+        db.add(ConfigTable('site_title', new_title))
+    else:
+        title_conf.value = new_title
+        db.flush()
+    redirect(admin.get_url('config'), 303)
+
 
 @admin.get('/', name='home')
 @view
@@ -110,4 +143,5 @@ def home():
 
 
 def init():
+    admin.install(plugin)
     return admin
