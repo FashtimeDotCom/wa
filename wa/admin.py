@@ -6,7 +6,7 @@ from bottle import Bottle, redirect, request
 from .html import *
 from .database import Config as ConfigTable
 from .database import create_session, plugin
-from . import ui, view
+from . import ui, view, users
 
 
 admin = Bottle()
@@ -52,7 +52,7 @@ def make_header():
 def make_sidebar(active=None):
     items = OrderedDict((
         ('基本配置', admin.get_url('config')),
-        ('用户管理', admin.get_url('config')),
+        ('用户管理', admin.get_url('users')),
         ('分组管理', admin.get_url('config')),
         ('权限管理', admin.get_url('config')),
         ('应用管理', admin.get_url('config')),
@@ -135,6 +135,18 @@ def update_site_title(db):
         db.flush()
     redirect(admin.get_url('config'), 303)
 
+
+@admin.get('/users', name='users')
+@view
+def users_():
+    h = make_head(title(get_title()))
+    mid = ui.container_fluid(
+        ui.row(
+            make_sidebar('用户管理'),
+            users.make_admin_main(),
+        )
+    )
+    return ui.page(h, body(make_header(), mid))
 
 @admin.get('/', name='home')
 @view
