@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-import sys, os
 
 setup(name='wa',
       version=':versiontools:wa:',
@@ -25,6 +24,7 @@ setup(name='wa',
           'MarkupSafe',
           'bottle',
           'bottle-sqlalchemy',
+          'beaker',
       ],
       entry_points="""
       # -*- Entry points: -*-

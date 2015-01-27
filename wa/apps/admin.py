@@ -3,11 +3,11 @@ from collections import OrderedDict
 
 from bottle import Bottle, redirect, request
 
-from .html import *
-from .database import Config as ConfigTable
-from .database import create_session, plugin
-from . import ui, view, users
-
+from ..html import *
+from ..database import Config as ConfigTable
+from ..database import create_session, plugin
+from .. import ui, route
+from . import users as users_app
 
 admin = Bottle()
 
@@ -89,7 +89,6 @@ def make_head(*a, **kw):
         *a, **kw
     )
 
-
 def make_main_basic():
     return ui.main(
         form(
@@ -111,9 +110,8 @@ def make_main_basic():
     )
 
 
-@admin.get('/config', name='config')
-@view
-def config():
+@route(admin.get, '/config')
+def config(db):
     h = make_head(title(get_title()))
     mid = ui.container_fluid(
         ui.row(
@@ -124,7 +122,7 @@ def config():
     return ui.page(h, body(make_header(), mid))
 
 
-@admin.post('/update_site_title', name='update_site_title')
+@route(admin.post, '/update_site_title')
 def update_site_title(db):
     new_title = request.forms['site_title']
     title_conf = db.query(ConfigTable).filter_by(key='site_title').first()
@@ -136,23 +134,21 @@ def update_site_title(db):
     redirect(admin.get_url('config'), 303)
 
 
-@admin.get('/users', name='users')
-@view
-def users_():
+@route(admin.get, '/users')
+def users(db):
     h = make_head(title(get_title()))
     mid = ui.container_fluid(
         ui.row(
             make_sidebar('用户管理'),
-            users.make_admin_main(),
+            users_app.make_admin_main(),
         )
     )
     return ui.page(h, body(make_header(), mid))
 
-@admin.get('/', name='home')
-@view
+
+@route(admin.get, '/')
 def home():
     return h2('hello, world.')
-
 
 def init():
     admin.install(plugin)

@@ -2,19 +2,17 @@
 from bottle import Bottle
 from sqlalchemy import Column, String, Integer, Sequence, DateTime
 
-from .database import Base, plugin
-from . import view
-from . import ui
-from .html import *
+from ..database import Base, plugin
+from .. import view
+from .. import ui, route
+from ..html import *
 
 
 users = Bottle()
 
-
 def init():
     users.install(plugin)
     return users
-
 
 class Users(Base):
     __tablename__ = 'users'
@@ -24,8 +22,7 @@ class Users(Base):
     register_time = Column(DateTime(timezone=True))
 
 
-@users.get('/signin', name='signin')
-@view
+@route(users.get, '/signin')
 def signin(db):
     pass
 
