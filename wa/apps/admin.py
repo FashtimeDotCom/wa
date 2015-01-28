@@ -4,23 +4,23 @@ from collections import OrderedDict
 from bottle import Bottle, redirect, request
 
 from ..html import *
-from ..database import Config as ConfigTable
-from ..database import create_session, plugin
+from .model import Config
+from ..database import plugin
 from .. import ui, route
 from . import users as users_app
 
 admin = Bottle()
 
-def get_title():
-    db = create_session()
-    title_conf = db.query(ConfigTable).filter_by(key='site_title').first()
+
+def get_title(db):
+    title_conf = db.query(Config).filter_by(key='site_title').first()
     if not title_conf:
         return 'A WA-based site.'
     return title_conf.value
 
 def make_nav():
     items = OrderedDict((
-        ('首页', admin.get_url('home')),
+        # ('首页', admin.get_url('home')),
         ('配置', admin.get_url('config')),
     ))
     return div(
@@ -31,12 +31,13 @@ def make_nav():
         klass='navbar-collapse collapse'
     )
 
-def make_header():
+
+def make_header(db):
     header = nav(
         ui.container_fluid(
             div(
                 a(
-                    get_title(),
+                    get_title(db),
                     klass='navbar-brand'
                 ),
                 klass='navbar-header'
@@ -89,14 +90,15 @@ def make_head(*a, **kw):
         *a, **kw
     )
 
-def make_main_basic():
+
+def make_main_basic(db):
     return ui.main(
         form(
-            rawtext('网站名称:'),
+            rawtext('网站名称：'),
             input_(
                 type='text',
                 name='site_title',
-                placeholder=get_title(),
+                placeholder=get_title(db),
                 # klass='form-control',
             ),
             input_(
@@ -112,22 +114,22 @@ def make_main_basic():
 
 @route(admin.get, '/config')
 def config(db):
-    h = make_head(title(get_title()))
+    h = make_head(title(get_title(db)))
     mid = ui.container_fluid(
         ui.row(
             make_sidebar('基本配置'),
-            make_main_basic(),
+            make_main_basic(db),
         )
     )
-    return ui.page(h, body(make_header(), mid))
+    return ui.page(h, body(make_header(db), mid))
 
 
 @route(admin.post, '/update_site_title')
 def update_site_title(db):
     new_title = request.forms['site_title']
-    title_conf = db.query(ConfigTable).filter_by(key='site_title').first()
+    title_conf = db.query(Config).filter_by(key='site_title').first()
     if not title_conf:
-        db.add(ConfigTable('site_title', new_title))
+        db.add(Config('site_title', new_title))
     else:
         title_conf.value = new_title
         db.flush()
@@ -136,14 +138,14 @@ def update_site_title(db):
 
 @route(admin.get, '/users')
 def users(db):
-    h = make_head(title(get_title()))
+    h = make_head(title(get_title(db)))
     mid = ui.container_fluid(
         ui.row(
             make_sidebar('用户管理'),
-            users_app.make_admin_main(),
+            users_app.make_admin_main(db),
         )
     )
-    return ui.page(h, body(make_header(), mid))
+    return ui.page(h, body(make_header(db), mid))
 
 
 @route(admin.get, '/')

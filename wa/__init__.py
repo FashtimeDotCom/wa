@@ -25,6 +25,7 @@ def route(route_func, *a, **kw):
             kw['name'] = f.__name__
         apply = kw.get('apply', None)
         if apply:
+            apply = bottle.makelist(apply)
             apply.append(view)
         else:
             apply = [view]
@@ -59,6 +60,7 @@ def init(conf=None):
 
     # first of all, create db.
     from . import database
+    from .apps import model
 
     database.init(app)
 
