@@ -39,8 +39,8 @@ def route(route_func, *a, **kw):
 def view(f):
     @wraps(f)
     def _(*a, **kw):
-        print a, kw
         return str(f(*a, **kw))
+
     return _
 
 
