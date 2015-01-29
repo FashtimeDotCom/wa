@@ -7,6 +7,7 @@ from .. import view
 from .. import ui, route
 from .model import Users
 
+
 users = Bottle()
 
 def init():
@@ -40,13 +41,18 @@ def make_admin_main(db):
     page = int(request.query.page or 1)
     items_per_page = int(request.query.items_per_page or 10)
 
-    users = db.query(Users)
-    users_page = SqlalchemyOrmPage(users, page=page, items_per_page=items_per_page)
+    query = db.query(Users)
+    users_page = SqlalchemyOrmPage(query, page=page, items_per_page=items_per_page)
     return ui.main(
         ui.panel_table(
             '用户列表',
             users_page.items,
             Users.head_map,
+            ui.pagination(
+                users_page.page_count,
+                page,
+                lambda x: '#',
+            )
         ),
         klass='col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2'
     )

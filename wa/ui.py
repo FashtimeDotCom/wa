@@ -24,7 +24,7 @@ def panel(title, *a, **kw):
     )
 
 
-def panel_table(title, data, head_map):
+def panel_table(title, data, head_map, other_component):
     # make head
     thead = h.thead()(
         h.tr()(
@@ -46,7 +46,44 @@ def panel_table(title, data, head_map):
             thead,
             tbody,
             klass='table'
-        )
+        ),
+        other_component,
+    )
+
+
+def pagination(total, current, href_func, near=1):
+    lis = []
+    bgn, end = 1, total
+    for i in xrange(total):
+        page_num = i + 1
+        if page_num == current:
+            curr_li = h.li(klass='active')
+        else:
+            curr_li = h.li()
+        if page_num == bgn or page_num == end:
+            lis.append(curr_li(h.a(str(page_num), href=href_func(page_num))))
+        elif abs(page_num - current) <= near:
+            lis.append(curr_li(h.a(str(page_num), href=href_func(page_num))))
+        elif abs(page_num - current) > near and (abs(page_num - bgn) == 1 or abs(page_num - end) == 1):
+            lis.append(curr_li(h.a('...'), klass='disabled'))
+    return h.nav(
+        h.ul(
+            *lis,
+            klass='pagination'
+        ),
+        h.form(
+            h.rawtext('跳转到：'),
+            h.input_(
+                type='text',
+                name='page',
+                placeholder=str(current),
+            ),
+            h.input_(
+                type='submit',
+                value='确定',
+            ),
+            method='get',
+        ),
     )
 
 
